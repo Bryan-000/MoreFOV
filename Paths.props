@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<!-- Set this to where ever your White Knuckle folder is. -->
+		<WKPath>C:\Program Files (x86)\Steam\steamapps\common\White Knuckle</WKPath>
+
+		<!-- You shouldn't need to touch these. If you do, ask me about it on discord @fredayddd321ewq -->
+		<ManagedPath>$(WKPath)\White Knuckle_Data\Managed</ManagedPath>
+		<PluginPath>$(WKPath)\BepInEx\plugins</PluginPath>
+
+		<!-- This is the path where the DLL is copied too, if you have it in a different folder or something then add the name of that folder onto here. -->
+		<CopyPath>$(PluginPath)\MoreFOV</CopyPath>
+	</PropertyGroup>
+</Project>
