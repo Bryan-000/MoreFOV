@@ -1,4 +1,6 @@
-﻿namespace MoreFOV;
+﻿using System.Linq;
+
+namespace MoreFOV;
 
 using BepInEx;
 using DarkMachine.UI;
@@ -30,14 +32,26 @@ public class Plugin : BaseUnityPlugin
     public static void EditFOV(UI_SettingsMenu __instance)
     {
         Transform SettingsMenuTrans = __instance.transform; // transgener >w<
-        Transform FOVSliderTrans = SettingsMenuTrans.Find("SettingsParent/Settings Pane/Video Settings/Options Tab/Video/SliderAsset - FOV/Slider");
+        Transform FOVSliderTrans = SettingsMenuTrans.Find("SettingsParent/Settings Pane/Video Settings/Main Panel/Tab - Video/Column - Video/SliderAsset - FOV/Slider");
+
+        // if the slider is not found, search for it in all children (just redundancy cuz i dont want to update the mod every update)
+        if (!FOVSliderTrans)
+        {
+            FOVSliderTrans = SettingsMenuTrans.GetComponentsInChildren<Transform>(true)
+                .FirstOrDefault(child =>
+                {
+                    return child.name.Contains("Slider") // if the slider is a child of a parent with "FOV" in its name, its probably the fov slider :3
+                           && child.parent.name.Contains("FOV")
+                           && child.GetComponent<SubmitSlider>() != null; // theres old sliders that dont have a SubmitSlider component, so we check for that too
+                });
+        }
 
         SubmitSlider FOVSlider = FOVSliderTrans.GetComponent<SubmitSlider>();
         FOVSlider.maxValue = 180f;
         FOVSlider.minValue = 0f;
 
         // reset the value because UI_SettingsMenu only has a start method
-        // and in awake/onenable the submit slider clamps the value b4 we set the new max
+        // and in Awake/OnEnable the submit slider clamps the value b4 we set the new max
         FOVSlider.value = SettingsManager.settings.playerFOV;
     }
 

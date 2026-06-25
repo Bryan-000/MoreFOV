@@ -27,6 +27,9 @@
 		<Reference Include="Assembly-CSharp">
 			<HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(ManagedPath)\UnityEngine.UI.dll</HintPath>
+		</Reference>
 		<Reference Include="DarkMachineUI">
 			<HintPath>$(ManagedPath)\DarkMachineUI.dll</HintPath>
 		</Reference>
