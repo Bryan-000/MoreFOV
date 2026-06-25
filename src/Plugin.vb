@@ -1,4 +1,5 @@
-﻿Imports System.Reflection.Emit
+﻿Imports System.Linq
+Imports System.Reflection.Emit
 Imports BepInEx
 Imports DarkMachine.UI
 Imports HarmonyLib
@@ -20,14 +21,34 @@ Namespace MoreFOV
         Public Shared Sub EditFOV(__instance As UI_SettingsMenu)
 
             Dim SettingsMenuTrans = __instance.transform ' transgener >w< '
-            Dim FOVSliderTrans = SettingsMenuTrans.Find("SettingsParent/Settings Pane/Video Settings/Options Tab/Video/SliderAsset - FOV/Slider")
+            Dim FOVSliderTrans = SettingsMenuTrans.Find("SettingsParent/Settings Pane/Video Settings/Main Panel/Tab - Video/Column - Video/SliderAsset - FOV/Slider")
+
+            ' if the slider is not found, search for it in all children (just redundancy cuz i dont want to update the mod every update) '
+            If (FOVSliderTrans Is Nothing) Then
+                FOVSliderTrans = SettingsMenuTrans.GetComponentsInChildren(Of Transform)(True).FirstOrDefault(
+                    Function(child)
+
+                        ' if the slider is a child of a parent with "FOV" in its name, its probably the fov slider :3 '
+                        If (child.name.Contains("Slider") AndAlso child.parent.name.Contains("FOV")) Then
+
+                            ' theres old sliders that dont have a SubmitSlider component, so we check for that too '
+                            If (child.GetComponent(Of SubmitSlider)() IsNot Nothing) Then
+                                Return True
+                            End If
+
+                        End If
+
+                        Return False
+
+                    End Function)
+            End If
 
             Dim FOVSlider = FOVSliderTrans.GetComponent(Of SubmitSlider)()
             FOVSlider.maxValue = 180.0F
             FOVSlider.minValue = 0F
 
             ' reset the value because UI_SettingsMenu only has a start method '
-            ' And in awake/onenable the submit slider clamps the value b4 we set the New max '
+            ' And in Awake/OnEnable the submit slider clamps the value b4 we set the New max '
             FOVSlider.value = SettingsManager.settings.playerFOV
         End Sub
 
