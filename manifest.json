@@ -1,6 +1,6 @@
 {
   "name": "MoreFOV",
-  "version_number": "1.0.0",
+  "version_number": "1.0.1",
   "website_url": "https://github.com/Bryan-000/MoreFOV",
   "description": "Removes the cap from the FOV slider and sets it to the mathematical limit.",
   "dependencies": [ "BepInEx-BepInExPack-5.4.2305" ]
